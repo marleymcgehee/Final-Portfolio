@@ -1,26 +1,54 @@
 ---
-title: "Index"
+title: "Data Analysis Portfolio"
 author: "Morde Bernstein, Marley McGehee, Kimberly McNeil"
-date: "5/05/2026"
+date: "Spring 2026"
 output:
   html_document:
     code_folding: hide
+linkcolor: blue
+urlcolor: blue
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
-                      error = FALSE, 
-                      message = FALSE)
-library(tidyverse)
-library(knitr)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Project One
+## About This Portfolio
 
-For this project we analyzed data from a Global Coral Bleaching Database. We focused on three variables, maximum percent bleached, average percent mortality, and region of coral. To read more about this [click here]()
+A collection of data analysis projects produced in R using RMarkdown. Each report explores a distinct dataset through exploratory data analysis, visualizations, and written interpretation—covering topics from sports performance to environmental science.
 
-## Project Two
+---
 
-## Project Three
+## Project 01 — Global Coral Bleaching Data Exploration
 
-[click here](Project-3.html)
+**Course project · March 2026 · Environmental Data Science**
+
+A statistical exploration of the Global Coral Bleaching Database (NCEI, 1963–2021), with 33,244 reef observations across four major regions: Caribbean/GOM, West-Indian, Great Barrier Reef, and Other. The report investigates the distribution of bleaching severity and coral mortality, finding a surprisingly weak correlation (r = 0.22) between the two variables even when broken down by region.
+
+**Key tools:** `tidyverse`, `ggplot2`, `knitr`, `janitor`
+
+[**→ View the full report**](LINK TO P1 GITHUB PAGE)
+
+---
+
+## Project 02 — Performance Trends in the 2025 Connecticut Sun Season
+
+**Course project · April 2026 · WNBA Sports Analytics**
+
+An exploration of the Connecticut Sun's 2025 WNBA season across 44 regular-season games (May–September). The report examines team scoring patterns broken down by day of week, month, weekend vs. weekday, and calendar quarter—revealing how scoring varied across time and game context.
+
+**Key tools:** `tidyverse`, `lubridate`, `ggplot2`, `knitr`
+
+[**→ View the full report**](LINK TO P2 GITHUB PAGE)
+
+---
+
+## Project 03 — Air Quality and Asthma in the United States: A State-Level Analysis
+
+**Course project · May 2026 · Public Health & Environmental Data**
+
+An investigation into whether air pollution (PM2.5 particulate matter) is associated with adult asthma prevalence across U.S. states in 2020. The report merges CDC asthma data with NIMHD air quality data, comparing state-level patterns through summary statistics, a scatterplot, a correlation coefficient (r = 0.066), and a linear regression model — ultimately finding no meaningful relationship between the two variables.
+
+**Key tools:** `tidyverse`, `ggplot2`, `knitr`, `janitor`
+
+[**→ View the full report**](LINK TO P3 GITHUB PAGE)
