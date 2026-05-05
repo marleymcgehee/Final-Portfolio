@@ -1,11 +1,26 @@
 ---
 title: "Index"
-author: "Marley McGehee"
-date: "5/4/2026"
-output: html_document
+author: "Morde Bernstein, Marley McGehee, Kimberly McNeil"
+date: "5/05/2026"
+output:
+  html_document:
+    code_folding: hide
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, 
+                      error = FALSE, 
+                      message = FALSE)
+library(tidyverse)
+library(knitr)
 ```
 
+## Project One
+
+For this project we analyzed data from a Global Coral Bleaching Database. We focused on three variables, maximum percent bleached, average percent mortality, and region of coral. To read more about this [click here]()
+
+## Project Two
+
+## Project Three
+
+[click here](Project-3.html)
