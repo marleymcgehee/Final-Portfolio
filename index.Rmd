@@ -15,13 +15,13 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## About This Portfolio
 
-A collection of data analysis projects produced in R using RMarkdown. Each report explores a distinct dataset through exploratory data analysis, visualizations, and written interpretation—covering topics from sports performance to environmental science.
+A collection of data analysis projects produced in R using RMarkdown. Each report explores a distinct dataset through exploratory data analysis, visualizations, and written interpretation, covering topics from sports performance to environmental science.
 
 ---
 
-## Project 01 — Global Coral Bleaching Data Exploration
+## Project 01: Global Coral Bleaching Data Exploration
 
-**Course project · March 2026 · Environmental Data Science**
+**Course project - March 2026 - Environmental Data Science**
 
 A statistical exploration of the Global Coral Bleaching Database (NCEI, 1963–2021), with 33,244 reef observations across four major regions: Caribbean/GOM, West-Indian, Great Barrier Reef, and Other. The report investigates the distribution of bleaching severity and coral mortality, finding a surprisingly weak correlation (r = 0.22) between the two variables even when broken down by region.
 
@@ -31,11 +31,11 @@ A statistical exploration of the Global Coral Bleaching Database (NCEI, 1963–2
 
 ---
 
-## Project 02 — Performance Trends in the 2025 Connecticut Sun Season
+## Project 02: Performance Trends in the 2025 Connecticut Sun Season
 
-**Course project · April 2026 · WNBA Sports Analytics**
+**Course project - April 2026 - WNBA Sports Analytics**
 
-An exploration of the Connecticut Sun's 2025 WNBA season across 44 regular-season games (May–September). The report examines team scoring patterns broken down by day of week, month, weekend vs. weekday, and calendar quarter—revealing how scoring varied across time and game context.
+An exploration of the Connecticut Sun's 2025 WNBA season across 44 regular-season games (May–September). The report examines team scoring patterns broken down by day of week, month, weekend vs. weekday, and calendar quarter, revealing how scoring varied across time and game context.
 
 **Key tools:** `tidyverse`, `lubridate`, `ggplot2`, `knitr`
 
@@ -43,11 +43,11 @@ An exploration of the Connecticut Sun's 2025 WNBA season across 44 regular-seaso
 
 ---
 
-## Project 03 — Air Quality and Asthma in the United States: A State-Level Analysis
+## Project 03: Air Quality and Asthma in the United States: A State-Level Analysis
 
-**Course project · May 2026 · Public Health & Environmental Data**
+**Course project - May 2026 - Public Health & Environmental Data**
 
-An investigation into whether air pollution (PM2.5 particulate matter) is associated with adult asthma prevalence across U.S. states in 2020. The report merges CDC asthma data with NIMHD air quality data, comparing state-level patterns through summary statistics, a scatterplot, a correlation coefficient (r = 0.066), and a linear regression model — ultimately finding no meaningful relationship between the two variables.
+An investigation into whether air pollution (PM2.5 particulate matter) is associated with adult asthma prevalence across U.S. states in 2020. The report merges CDC asthma data with NIMHD air quality data, comparing state-level patterns through summary statistics, a scatterplot, a correlation coefficient (r = 0.066), and a linear regression model, ultimately finding no meaningful relationship between the two variables.
 
 **Key tools:** `tidyverse`, `ggplot2`, `knitr`, `janitor`
 
