@@ -1,0 +1,264 @@
+---
+title: "Performance Trends in the 2025 Connecticut Sun Season"
+author: "Morde Bernstein, Marley McGehee, Kimberly McNeil"
+date: "4/17/2026"
+output:
+  html_document:
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      error = FALSE, 
+                      message = FALSE)
+library(tidyverse)
+library(lubridate)
+library(knitr)
+```
+
+## Introduction
+
+Our dataset is the 2025 schedule and results for the Connecticut Sun, a WNBA team. The data looks at the dates when the games were played, who they played against, the scores, as well as whether they were on a win/lose streak. Additional factors include where they played the game, if it went into overtime, and any additional notes. The sample size is 44. We obtained the data from Basketball Reference's website on the [2025 Connecticut Sun Schedule and Results](http://basketball-reference.com/wnba/teams/CON/2025_games.html) page.
+
+## Data Import
+
+```{r}
+basketball <- read_csv("connecticut_sun_2025.csv", 
+                       col_types = cols(Date = col_date("%a %b %d %Y")))
+
+# Initialize cleaning the column names (and giving names to the unnamed)
+basketball <- janitor::clean_names(basketball) 
+
+# Make the janitor's work clearer
+basketball <- basketball %>%
+  rename(
+    game = g,
+    home_or_away = x3,
+    result = x5,
+    overtime = x6,
+    team_points = tm,
+    opp_points = opp,
+    total_wins = w,
+    total_losses = l
+  ) %>%
+  mutate(
+    home_or_away = ifelse(is.na(home_or_away) | home_or_away == "", "Home", "Away"),
+    overtime = ifelse(is.na(overtime) | overtime == "", "False", "True")
+)
+
+```
+
+We first imported the data as a .csv file, then used a function to make the date variable be recognized as date data instead of simply text. While plain text is easy for humans to read, computers can have difficulty, and this will allow it to understand that it is a date and be able to validate our data (e.g. dates like Feburary 30th will be flagged and denied) and perform unique calculations (e.g. timespans). When compared to most datasets with dates, this dataset uniquely contains an abbreviated day of the week in the date variable, but we decided not to include it in our current table because later functions will be able to pull the day of the week from the date alone, so it is not necessary. Following this, we cleaned the names of the columns and updated missing/confusing labels so they would be easier to both use and understand going forward. 
+
+Let's take a brief look at the data:
+
+```{r}
+kable(basketball %>%
+        head(n = 5), 
+      caption = "The First Five Rows of our Cleaned Basketball Data")
+```
+
+
+## Exploratory Data Analysis
+
+### Variable Exploration
+
+#### Date Variable
+
+```{r}
+basketball %>%
+  mutate(wday = wday(date, label = TRUE)) %>%
+  ggplot(aes(x = wday)) +
+  geom_bar(color = "black",
+           fill = "darkorange") +
+  labs (x = "Day of the Week",
+        title = "Day of the Week Breakdown")
+```
+
+Here we can see the breakdown of days of the week in which games were played. Games were played on all days of the week with Sunday being by far the most popular day, and Thursday being the least popular. 
+
+```{r}
+basketball %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  ggplot(aes(x = month)) +
+  geom_bar(color = "black",
+           fill = "darkorange") +
+  labs(title = "Month Data")
+```
+
+Now we can see the breakdown of months in which games were played. Games were played from May to September, with August having the most games played in it. This makes sense as the WNBA season starts in May and ends in September.
+
+
+```{r}
+ggplot(basketball %>%
+         mutate(day_type = ifelse(wday(date) %in% c(1,7), "Weekend", "Weekday")),
+       aes(x = day_type)) +
+  geom_bar(color = "black",
+           fill = "darkorange") +
+  labs(title = "Number of Games on Weekends vs Weekdays",
+       x = "Weekday or Weekend")
+```
+
+Here we can see that they played more games on weekdays than on weekends. This could be useful for later analysis as there is more data for games played on weekdays. 
+
+
+#### Team Score
+
+```{r}
+basketball %>%
+  summarize(
+    Count = n(),
+      Mean = mean(team_points, na.rm = TRUE),
+      Median = median(team_points, na.rm = TRUE),
+      sd = sd(team_points, na.rm = TRUE),
+      Min = min(team_points, na.rm = TRUE),
+      Q1 = quantile(team_points, 0.25, na.rm = TRUE),
+      Q3 = quantile(team_points, 0.75, na.rm = TRUE),
+      Max = max(team_points, na.rm = TRUE)
+  ) %>% 
+  kable(caption = "Summary Statistics for Team Points")
+```
+
+```{r}
+basketball %>% 
+  ggplot(aes(x = team_points)) +
+    geom_histogram(bins = 15,
+                   fill = "darkorange",
+                   color = "black") +
+    labs(title = "Distribution of Team Points (Histogram)",
+         x = "Team Score",
+         y = "Count")
+```
+
+```{r}
+ggplot(basketball, aes(x=team_points))+
+  geom_boxplot(fill = "darkorange", color = "black") +
+  labs (title = "Team Score Boxplot", 
+    x = "Team Score")
+
+```
+
+Above we can see visualizations of the team score per game. Across all 44 of the games, the lowest score was 52 and the highest score was 101. The average score was approximately 75 pts. 
+
+
+#### Bivariate Relationship
+```{r}
+ggplot(basketball, aes(x = date, y = team_points)) +
+  geom_point(alpha = 0.2)+ 
+  geom_smooth(color = "darkorange") +
+  labs(title = "Team Scores Over Time", 
+       x = "Date", 
+       y = "Team Score")
+```
+
+Here we can see the relationship between the date and team score. There appears to be some fluctuation due to month, with scores increasing in August, and then decreasing into September. 
+
+
+### Time-Based Patterns
+
+#### Day/Month 
+
+The following summary and bar plot showcase the Average Team Score by the Day of the Week: 
+
+```{r}
+basketball %>%
+  mutate(day = wday(date, label = TRUE)) %>%
+  group_by(day) %>%
+  summarize(avg_score = mean(team_points)) %>%
+  kable(caption = "Average Team Score by Day of the Week")
+```
+
+```{r}
+basketball %>%
+  mutate(day = wday(date, label = TRUE)) %>%
+  group_by(day) %>%
+  summarize(avg_score = mean(team_points)) %>%
+  ggplot(aes(x = day, y = avg_score)) +
+  geom_col(fill = "darkorange", color = "black") +
+  labs(title = "Average Team Score by Day of the Week",
+       x = "Day of the Week",
+       y = "Average Team Score")
+```
+
+Looking at the average team score by the day of the week, we can see that there is not much variance in the average amount of points scored each day of the week. It does seem to slightly increase as the week continues, with Monday being the lowest at 71.8 points and Saturday being the highest at 83.7 points. Sundays, the weekday with the most games by plurality, have the second lowest average team score.
+
+This new summary and bar plot showcase the Average Team Score by Month:
+
+```{r}
+basketball %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  group_by(month) %>%
+  summarize(avg_score = mean(team_points)) %>%
+  kable(caption = "Average Team Score by Month")
+```
+
+```{r}
+basketball %>%
+  mutate(month = month(date, label = TRUE)) %>%
+  group_by(month) %>%
+  summarize(avg_score = mean(team_points)) %>%
+  ggplot(aes(x = month, y = avg_score)) +
+  geom_col(fill = "darkorange", color = "black") +
+  labs(title = "Average Team Score by Month",
+       x = "Month",
+       y = "Average Team Score")
+```
+
+Now looking at the average team score by month, we can see that there is also not too much variance between the months, with a slight pattern of having one good month—May and July—before getting increasingly worse—first into June, then August/September—though not by much. June is our lowest performing month at 69.45 points while July is our highest at 82.125 points. 
+
+#### Weekend vs Weekday
+
+```{r}
+basketball %>%
+  mutate(day_type = ifelse(wday(date) %in% c(1,7), "Weekend", "Weekday")) %>% # 1 = Sun and 7 = Sat
+  group_by(day_type) %>%
+  summarize(avg_score = mean(team_points)) %>%
+  kable(caption = "Average Team Scores on Weekdays vs Weekends")
+```
+
+```{r}
+ggplot(basketball %>%
+         mutate(day_type = ifelse(wday(date) %in% c(1,7), "Weekend", "Weekday")),
+       aes(x = day_type, y = team_points)) +
+  geom_boxplot(fill = "darkorange") +
+  labs(title = "Average Team Scores on Weekdays vs Weekends",
+       x = "Weekday or Weekend", 
+       y = "Average Team Score")
+```
+
+The Suns tended to perform better on weekdays, with a higher minimum and maximum average team score, and a higher median average team score than on weekends. Since we know that fewer games were played on weekends, it could be possible that the apparent higher inter-quartile range is because that smaller number of games means the quartiles have stretched slightly.  
+
+
+#### Season/Quarter
+
+```{r}
+basketball %>%
+  mutate(quarter = quarter(date)) %>%
+  group_by(quarter) %>%
+  summarize(avg_score = mean(team_points)) %>%
+  kable(caption = "Average Team Scores by Quarter")
+```
+
+```{r}
+basketball %>%
+  mutate(quarter = quarter(date)) %>%
+  group_by(quarter) %>%
+  summarize(avg_score = mean(team_points)) %>%
+  ggplot(aes(x = factor(quarter), y = avg_score)) +
+  geom_col(fill = "darkorange", color = "black") +
+  labs(title = "Average Team Score by Season Quarter",
+       x = "Quarter",
+       y = "Average Team Score")
+```
+
+The Connecticut Suns played games in quarters 2 and 3 with quarter 2 comprising April through June and quarter 3 being from July to September. The average team score was slightly higher in quarter 3 with an average of 78 points compared to 71 points in quarter 2. 
+
+## Conclusion
+
+Throughout the Connecticut Sun’s season, May through September, we can see slight variations in the team scores depending on the date. The team performed similarly on weekends and weekdays, with an average score of approximately 75. The average team score based on day of the week stayed relatively consistent.
+
+The average team score varied slightly per month, with July having the highest average team score and June having the lowest. 
+
+The average team score varied based on quarter of the year. The average team score in quarter three was 78.85 which was higher than the score in quarter 2 of 71. 
+
+There are a multitude of other factors that could contribute to team score changing, such as player injuries or the opponent team. For future analysis, it would be interesting to look into data for preseason events in April, and compare performance from preseason to the actual season. Additionally, looking into the opponents score and where the game was played would also be interesting. 
