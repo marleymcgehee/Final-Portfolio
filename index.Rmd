@@ -27,7 +27,7 @@ A statistical exploration of the Global Coral Bleaching Database (NCEI, 1963–2
 
 **Key tools:** `tidyverse`, `ggplot2`, `knitr`, `janitor`
 
-[**→ View the full report**](https://r.muhlenberg.edu/s/995988ebff7ddd68a370e/files/Collaborating-Loading-Data-and-Exploratory-Data-Analysis/portfolio/Final-Portfolio/project_1.html)
+[**→ View the full report**](project_1.html)
 
 ---
 
@@ -39,7 +39,7 @@ An exploration of the Connecticut Sun's 2025 WNBA season across 44 regular-seaso
 
 **Key tools:** `tidyverse`, `lubridate`, `ggplot2`, `knitr`
 
-[**→ View the full report**](https://r.muhlenberg.edu/s/995988ebff7ddd68a370e/files/Collaborating-Loading-Data-and-Exploratory-Data-Analysis/portfolio/Final-Portfolio/Project-2.html)
+[**→ View the full report**](Project-2.html)
 
 ---
 
@@ -51,4 +51,4 @@ An investigation into whether air pollution (PM2.5 particulate matter) is associ
 
 **Key tools:** `tidyverse`, `ggplot2`, `knitr`, `janitor`
 
-[**→ View the full report**](https://r.muhlenberg.edu/s/995988ebff7ddd68a370e/files/Collaborating-Loading-Data-and-Exploratory-Data-Analysis/portfolio/Final-Portfolio/Project-3.html)
+[**→ View the full report**](Project-3.html)
